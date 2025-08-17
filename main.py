@@ -3,14 +3,25 @@
 from mark import *
 import json
 from time import localtime
+import os
+
+savefile_path = "savefile.json"
 
 def err(message):
       print(Fore.RED+f"Ошибка! {message}.")
       print("Повторите ещё раз."+Fore.WHITE)
 
 def main():
-    with open("savefile.json") as savefile:
-        savelog = json.load(savefile)
+    # with open("savefile.json", "") as savefile:
+    #     savelog = json.load(savefile)
+    if not os.path.exists(savefile_path):
+        with open(savefile_path, 'w') as f:
+            json.dump({}, f)
+    with open(savefile_path, 'r') as f:
+        try:
+            savelog = json.load(f)
+        except json.JSONDecodeError:
+            savelog = {}
 
     print("Добро пожаловать! Напишите 0 для выхода.")
     sum = 0
@@ -35,10 +46,10 @@ def main():
     except IndexError:
         id_for_savelog = 0
     savelog[id_for_savelog] = {
-        "date": f"{localtime().tm_year}, {localtime().tm_mday} {["января", "февраля", "марта", "апреля", "мая", "июня", "июля", "августа", "сентября", "октября", "ноября", "декабря"][localtime().tm_mon]}",
+        "date": f"{localtime().tm_year}, {localtime().tm_mday} {["января", "февраля", "марта", "апреля", "мая", "июня", "июля", "августа", "сентября", "октября", "ноября", "декабря"][localtime().tm_mon-1]}",
         "sum": sum
     }
-    with open("savefile.json", "w") as savefile:
+    with open("savefile.json", "w+") as savefile:
         json.dump(savelog, savefile, indent=4)
     
 if __name__ == "__main__":
