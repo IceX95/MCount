@@ -6,6 +6,8 @@ dist/
 wheels/
 *.egg-info
 
+lang/__pycache__
+
 # Virtual environments
 .venv
 

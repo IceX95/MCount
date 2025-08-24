@@ -5,15 +5,70 @@ import json
 from time import localtime
 import os
 
+# from lang import lang_info
+# if lang_info.current is not None:
+#     try:
+#         exec(f"from lang import {lang_info.current}")
+#         labels = lang_info.current
+#     except ImportError:
+#         labels = lang_info.current = "en"
+# else:
+#     from lang import en
+#     print(en.start)
+#     print(lang_info.available)
+#     while True:
+#         choice = input(">>> ")
+#         if choice in lang_info.available:
+#             exec(f"from lang import {choice}")
+#             break
+#         else:
+#             print(en.try_one_more_time)
+
+import importlib
+from lang import lang_info
+
+def load_language_module(lang_code):
+    try:
+        return importlib.import_module(f"lang.{lang_code}")
+    except ImportError:
+        return None
+
+with open("lang/current") as current_lang_file:
+    current_lang = current_lang_file.read()
+if current_lang != '':
+    module = load_language_module(current_lang)
+    if module:
+        labels = module
+    else:
+        labels = load_language_module(lang_info.default)
+        current_lang = lang_info.default
+else:
+    labels = load_language_module(lang_info.default)
+    print(labels.start)
+    print(labels.available_languages, lang_info.available)
+    
+    while True:
+        choice = input(">>> ").strip().lower()
+        if choice in lang_info.available:
+            selected_lang = load_language_module(choice)
+            if selected_lang:
+                current_lang = choice
+                with open("lang/current", "w", encoding="utf-8") as f:
+                    f.write(current_lang)
+                labels = selected_lang
+                break
+            else:
+                print(labels.language_not_found)
+        else:
+            print(labels.try_one_more_time)
+
 savefile_path = "savefile.json"
 
 def err(message):
-      print(Fore.RED+f"Ошибка! {message}.")
-      print("Повторите ещё раз."+Fore.WHITE)
+      print(Fore.RED + message)
+      print(labels.try_one_more_time + Fore.WHITE)
 
 def main():
-    # with open("savefile.json", "") as savefile:
-    #     savelog = json.load(savefile)
     if not os.path.exists(savefile_path):
         with open(savefile_path, 'w') as f:
             json.dump({}, f)
@@ -23,7 +78,7 @@ def main():
         except json.JSONDecodeError:
             savelog = {}
 
-    print("Добро пожаловать! Напишите 0 для выхода.")
+    print(labels.welcome)
     sum = 0
     inp = 1
     while True:
@@ -35,11 +90,10 @@ def main():
             print(current.info)
             sum += current.cost
         except ValueError:
-            err("Получили строку вместо числа")
+            err(labels.string_instead_of_number)
         except TypeError:
-            err("Вы ничего не ввели")
-    print("Итоги: ")
-    print(f"Всего заработано {sum} сум. Ура!")
+            err(labels.nothing_entered)
+    print(labels.results, sum, labels.sums)
 
     try:
         id_for_savelog = str(int(list(savelog.keys())[-1])+1)
