@@ -1,7 +1,7 @@
 [project]
 name = "mcount"
 version = "0.1.0"
-description = "Add your description here"
+description = "Утилита для подсчёта зарплаты за оценки в школе"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = []
