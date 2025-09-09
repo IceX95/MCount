@@ -1,9 +1,10 @@
 from colorama import Fore # type: ignore
+from lang.labels import labels
 
 class MarkTypeEnum:
-    FO = 0
-    SO = 1
-    CSOCH = 2
+    FA = 0
+    SA = 1
+    CSAQ = 2
 
 class PropertyEnum:
     MARK = 0
@@ -14,14 +15,14 @@ class PropertyEnum:
 
 class Mark:
     properties_variants = [
-    	[0, 100.1, "А вот врать не надо", Fore.RED, 0],
-    	[5, 100.0, "Офигеть", Fore.MAGENTA, 2000],
-    	[5, 86.0, "Круто", Fore.BLUE, 2000],
-    	[4, 66.0, "Хорошо", Fore.GREEN, 1000],
-    	[3, 30.0, "Так себе", Fore.YELLOW, 500],
-    	[2, 0.0, "Офигеть", Fore.RED, -1000],
+    	[0, 100.1, labels.error_mark_comment, Fore.RED, 0],
+    	[5, 100.0, labels.wow_mark_comment, Fore.MAGENTA, 2000],
+    	[5, 86.0, labels.cool_mark_comment, Fore.BLUE, 2000],
+    	[4, 66.0, labels.nice_mark_comment, Fore.GREEN, 1000],
+    	[3, 30.0, labels.okay_mark_comment, Fore.YELLOW, 500],
+    	[2, 0.0, labels.wow_mark_comment, Fore.RED, -1000],
 	]
-    def __init__(self, value, max_value=10, type=MarkTypeEnum.FO):
+    def __init__(self, value, max_value=10, type=MarkTypeEnum.FA):
         self.value = value
         self.max_value = value
         self.type = type
@@ -48,10 +49,10 @@ class Mark:
         else:
             cost = 500
         match type:
-            case MarkTypeEnum.FO | MarkTypeEnum.SO:
+            case MarkTypeEnum.FA | MarkTypeEnum.SA:
                 return cost
-            case MarkTypeEnum.CSOCH:
+            case MarkTypeEnum.CSAQ:
                 return cost*2
 
     def get_info(self) -> str:
-        return self.color+f"{self.comment}! Оценка - {self.mark}. Процент - {self.percent}%, стоимость - {self.cost}."+Fore.WHITE
+        return self.color+f"{self.comment}! {labels.mark} - {self.mark}. {labels.percent} - {self.percent}%, {labels.cost} - {self.cost}."+Fore.WHITE
