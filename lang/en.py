@@ -7,3 +7,4 @@ string_instead_of_number = "Got a string instead of a number"
 nothing_entered = "Nothing entered"
 results = "Totals earned:"
 sums = "sums"
+month_list = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]

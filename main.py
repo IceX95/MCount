@@ -4,28 +4,10 @@ from mark import *
 import json
 from time import localtime
 import os
-
-# from lang import lang_info
-# if lang_info.current is not None:
-#     try:
-#         exec(f"from lang import {lang_info.current}")
-#         labels = lang_info.current
-#     except ImportError:
-#         labels = lang_info.current = "en"
-# else:
-#     from lang import en
-#     print(en.start)
-#     print(lang_info.available)
-#     while True:
-#         choice = input(">>> ")
-#         if choice in lang_info.available:
-#             exec(f"from lang import {choice}")
-#             break
-#         else:
-#             print(en.try_one_more_time)
-
 import importlib
 from lang import lang_info
+
+savefile_path = "savefile.json"
 
 def load_language_module(lang_code):
     try:
@@ -61,8 +43,6 @@ else:
                 print(labels.language_not_found)
         else:
             print(labels.try_one_more_time)
-
-savefile_path = "savefile.json"
 
 def err(message):
       print(Fore.RED + message)
@@ -100,7 +80,7 @@ def main():
     except IndexError:
         id_for_savelog = 0
     savelog[id_for_savelog] = {
-        "date": f"{localtime().tm_year}, {localtime().tm_mday} {["января", "февраля", "марта", "апреля", "мая", "июня", "июля", "августа", "сентября", "октября", "ноября", "декабря"][localtime().tm_mon-1]}",
+        "date": [localtime().tm_year, localtime().tm_mon, localtime().tm_mday],
         "sum": sum
     }
     with open("savefile.json", "w+") as savefile:
